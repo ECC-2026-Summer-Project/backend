@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.IOException;
 
@@ -35,8 +36,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String userId = jwtProvider.getUserId(token);
 
-            // 현재는 토큰 검증만 수행
-            System.out.println("JWT 인증 성공 : " + userId);
+            UserAuthentication authentication =
+                    new UserAuthentication(userId);
+
+            SecurityContextHolder
+                    .getContext()
+                    .setAuthentication(authentication);
 
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
