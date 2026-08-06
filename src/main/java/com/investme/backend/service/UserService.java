@@ -122,4 +122,30 @@ public class UserService {
 
     }
 
+    public String refreshAccessToken(
+            String refreshToken
+    ) {
+
+        if (!jwtProvider.validateToken(refreshToken)) {
+            throw new InvalidLoginException();
+        }
+
+        String userId =
+                jwtProvider.getUserId(refreshToken);
+
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(InvalidLoginException::new);
+
+        if (user.getRefreshToken() == null) {
+            throw new InvalidLoginException();
+        }
+
+        if (!user.getRefreshToken().equals(refreshToken)) {
+            throw new InvalidLoginException();
+        }
+
+        return jwtProvider.createToken(userId);
+
+    }
+
 }

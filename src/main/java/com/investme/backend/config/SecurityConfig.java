@@ -35,6 +35,7 @@ public class SecurityConfig {
                                 "/api/users/signup",
                                 "/api/users/login",
                                 "/api/users/check-id",
+                                "/api/users/refresh",
                                 "/h2-console/**"
                         ).permitAll()
 

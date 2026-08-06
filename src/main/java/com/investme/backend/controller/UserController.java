@@ -128,4 +128,26 @@ public class UserController {
         );
     }
 
+    @PostMapping("/refresh")
+    public ApiResponse<RefreshResponse> refresh(
+
+            @RequestBody RefreshRequest request
+    ) {
+
+        String accessToken =
+                userService.refreshAccessToken(
+                        request.getRefreshToken()
+                );
+
+        RefreshResponse response =
+                new RefreshResponse(accessToken);
+
+        return new ApiResponse<>(
+                true,
+                response,
+                null
+        );
+
+    }
+
 }
