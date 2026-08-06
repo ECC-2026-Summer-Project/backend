@@ -5,6 +5,7 @@ import com.investme.backend.dto.SignupRequest;
 import com.investme.backend.entity.User;
 import com.investme.backend.exception.DuplicateUserIdException;
 import com.investme.backend.exception.InvalidLoginException;
+import com.investme.backend.exception.InvalidRefreshTokenException;
 import com.investme.backend.jwt.JwtProvider;
 import com.investme.backend.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -127,21 +128,21 @@ public class UserService {
     ) {
 
         if (!jwtProvider.validateToken(refreshToken)) {
-            throw new InvalidLoginException();
+            throw new InvalidRefreshTokenException();
         }
 
         String userId =
                 jwtProvider.getUserId(refreshToken);
 
         User user = userRepository.findByUserId(userId)
-                .orElseThrow(InvalidLoginException::new);
+                .orElseThrow(InvalidRefreshTokenException::new);
 
         if (user.getRefreshToken() == null) {
-            throw new InvalidLoginException();
+            throw new InvalidRefreshTokenException();
         }
 
         if (!user.getRefreshToken().equals(refreshToken)) {
-            throw new InvalidLoginException();
+            throw new InvalidRefreshTokenException();
         }
 
         return jwtProvider.createToken(userId);
