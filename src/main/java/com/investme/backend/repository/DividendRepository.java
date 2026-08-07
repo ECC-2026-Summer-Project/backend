@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface DividendRepository extends JpaRepository<Dividend, Long> {
 
-    // 특정 종목의 배당 이력을 연도 내림차순(최신순)으로 조회
     List<Dividend> findByCompany_CompanyIdOrderByYearDesc(String companyId);
 }

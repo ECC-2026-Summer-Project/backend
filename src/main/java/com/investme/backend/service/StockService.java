@@ -8,6 +8,7 @@ import com.investme.backend.entity.CompanyInfo;
 import com.investme.backend.exception.StockNotFoundException;
 import com.investme.backend.repository.CompanyInfoRepository;
 import com.investme.backend.repository.CompanyRepository;
+import com.investme.backend.repository.DividendRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.investme.backend.dto.stock.StockTradeResponse;
@@ -15,6 +16,8 @@ import com.investme.backend.entity.TradeHistory;
 import com.investme.backend.repository.TradeHistoryRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import com.investme.backend.dto.stock.StockDividendResponse;
+import com.investme.backend.entity.Dividend;
 
 import java.util.Random;
 import java.util.ArrayList;
@@ -27,15 +30,18 @@ public class StockService {
     private final CompanyRepository companyRepository;
     private final CompanyInfoRepository companyInfoRepository;
     private final TradeHistoryRepository tradeHistoryRepository;
+    private final DividendRepository dividendRepository;
 
     public StockService(
             CompanyRepository companyRepository,
             CompanyInfoRepository companyInfoRepository,
-            TradeHistoryRepository tradeHistoryRepository
+            TradeHistoryRepository tradeHistoryRepository,
+            DividendRepository dividendRepository
     ) {
         this.companyRepository = companyRepository;
         this.companyInfoRepository = companyInfoRepository;
         this.tradeHistoryRepository = tradeHistoryRepository;
+        this.dividendRepository = dividendRepository;
     }
 
     public StockSummaryResponse getSummary(String stockId) {
@@ -192,6 +198,25 @@ public class StockService {
                         .price(trade.getPrice())
                         .quantity(trade.getQuantity())
                         .side(trade.getTradeType())
+                        .build()
+                )
+                .toList();
+    }
+
+    public List<StockDividendResponse> getDividends(String stockId) {
+
+        // 존재하지 않는 종목인지 확인
+        companyRepository.findByCompanyId(stockId)
+                .orElseThrow(() -> new StockNotFoundException(stockId));
+
+        List<Dividend> dividends =
+                dividendRepository.findByCompany_CompanyIdOrderByYearDesc(stockId);
+
+        return dividends.stream()
+                .map(dividend -> StockDividendResponse.builder()
+                        .year(dividend.getYear())
+                        .amountPerShare(dividend.getAmountPerShare())
+                        .yieldRate(dividend.getYieldRate())
                         .build()
                 )
                 .toList();
