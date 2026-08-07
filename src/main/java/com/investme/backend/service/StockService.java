@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import com.investme.backend.dto.stock.StockDividendResponse;
 import com.investme.backend.entity.Dividend;
+import com.investme.backend.dto.stock.StockInfoResponse;
 
 import java.util.Random;
 import java.util.ArrayList;
@@ -221,4 +222,25 @@ public class StockService {
                 )
                 .toList();
     }
+
+    public StockInfoResponse getInfo(String stockId) {
+
+        Company company = companyRepository.findByCompanyId(stockId)
+                .orElseThrow(() -> new StockNotFoundException(stockId));
+
+        return StockInfoResponse.builder()
+                .stockId(company.getCompanyId())
+                .name(company.getCompanyName())
+                .description(null)
+                .industry(company.getSector())
+                .marketCap(null)
+                .per(null)
+                .dividendYield(company.getDividendYield())
+                .listedDate(null)
+                .ceo(null)
+                .employees(null)
+                .build();
+    }
+
+
 }
