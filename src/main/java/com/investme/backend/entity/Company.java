@@ -25,6 +25,9 @@ public class Company {
     @Column(name = "current_price", nullable = false)
     private Integer currentPrice;
 
+    @Column(name = "base_price", nullable = false)
+    private Integer basePrice;
+    
     @Column(name = "trend")
     private String trend;
 
