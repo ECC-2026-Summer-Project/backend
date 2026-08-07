@@ -36,4 +36,9 @@ public class Company {
 
     @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
+
+    public void updatePrice(Integer newPrice) {
+        this.currentPrice = newPrice;
+        this.lastUpdated = LocalDateTime.now();
+      }
 }

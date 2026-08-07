@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "StockPriceHistory")
+@Table(name = "stock_price_history")
 public class StockPriceHistory {
 
     @Id
@@ -25,4 +25,13 @@ public class StockPriceHistory {
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    public StockPriceHistory(
+            String companyId,
+            Integer price
+    ) {
+        this.companyId = companyId;
+        this.price = price;
+        this.createdAt = LocalDateTime.now();
+    }
 }
