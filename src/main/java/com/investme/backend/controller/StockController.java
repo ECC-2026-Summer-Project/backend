@@ -5,6 +5,7 @@ import com.investme.backend.dto.stock.StockChartResponse;
 import com.investme.backend.dto.stock.StockSummaryResponse;
 import com.investme.backend.service.StockService;
 import org.springframework.web.bind.annotation.*;
+import com.investme.backend.dto.stock.StockOrderBookResponse;
 
 import java.util.List;
 
@@ -36,6 +37,16 @@ public class StockController {
     ) {
 
         List<StockChartResponse> response = stockService.getChart(stockId, interval, range);
+
+        return new ApiResponse<>(true, response, null);
+    }
+
+    @GetMapping("/{stockId}/orderbook")
+    public ApiResponse<StockOrderBookResponse> getOrderBook(
+            @PathVariable String stockId
+    ) {
+
+        StockOrderBookResponse response = stockService.getOrderBook(stockId);
 
         return new ApiResponse<>(true, response, null);
     }

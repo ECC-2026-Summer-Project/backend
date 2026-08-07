@@ -1,6 +1,7 @@
 package com.investme.backend.service;
 
 import com.investme.backend.dto.stock.StockChartResponse;
+import com.investme.backend.dto.stock.StockOrderBookResponse;
 import com.investme.backend.dto.stock.StockSummaryResponse;
 import com.investme.backend.entity.Company;
 import com.investme.backend.entity.CompanyInfo;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -113,5 +116,50 @@ public class StockService {
             case "1d" -> 24 * 60L;
             default -> 24 * 60L;
         };
+    }
+
+    public StockOrderBookResponse getOrderBook(String stockId) {
+
+        Company company = companyRepository.findByCompanyId(stockId)
+                .orElseThrow(() -> new StockNotFoundException(stockId));
+
+        long currentPrice = company.getCurrentPrice();
+
+        Random random = new Random();
+
+        List<StockOrderBookResponse.OrderBookLevel> asks = new ArrayList<>();
+        List<StockOrderBookResponse.OrderBookLevel> bids = new ArrayList<>();
+
+        // 매도호가 5단계
+        for (int i = 1; i <= 5; i++) {
+            long price = currentPrice + (100L * i);
+            long quantity = 100L + random.nextInt(900);
+
+            asks.add(
+                    StockOrderBookResponse.OrderBookLevel.builder()
+                            .price(price)
+                            .quantity(quantity)
+                            .build()
+            );
+        }
+
+        // 매수호가 5단계
+        for (int i = 1; i <= 5; i++) {
+            long price = currentPrice - (100L * i);
+            long quantity = 100L + random.nextInt(900);
+
+            bids.add(
+                    StockOrderBookResponse.OrderBookLevel.builder()
+                            .price(price)
+                            .quantity(quantity)
+                            .build()
+            );
+        }
+
+        return StockOrderBookResponse.builder()
+                .currentPrice(currentPrice)
+                .asks(asks)
+                .bids(bids)
+                .build();
     }
 }
