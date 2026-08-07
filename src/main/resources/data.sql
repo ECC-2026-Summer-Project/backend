@@ -1,0 +1,5 @@
+INSERT INTO company (company_id, company_name, sector, current_price, trend, volatility, dividend_yield, last_updated)
+VALUES ('005930', '삼성전자', '반도체', 71500, 'UP', 0.15, 0.4, CURRENT_TIMESTAMP);
+
+INSERT INTO company_info (company_id, market, description, listed_date, ceo, employees, is_ai_recommended, market_cap, per)
+VALUES ('005930', 'KOSPI', '반도체 및 IT 기기 제조 기업', '1975-06-11', '한종희', 267900, true, 427000000000000, 15.8);
