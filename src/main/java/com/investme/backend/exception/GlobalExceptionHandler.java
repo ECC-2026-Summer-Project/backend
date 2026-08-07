@@ -48,4 +48,17 @@ public class GlobalExceptionHandler {
                 .body(response);
     }
 
+    @ExceptionHandler(StockNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleStockNotFound(
+            StockNotFoundException e
+    ) {
+
+        ApiResponse<Void> response =
+                new ApiResponse<>(false, null, e.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(response);
+    }
+
 }

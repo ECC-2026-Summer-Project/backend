@@ -21,7 +21,7 @@ public class Dividend {
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
-    @Column(name = "year", nullable = false)
+    @Column(name = "dividend_year", nullable = false)
     private Integer year;
 
     @Column(name = "amount_per_share", nullable = false)
