@@ -9,3 +9,9 @@ VALUES ('005930', 2025, 850, 0.4);
 
 INSERT INTO dividend (company_id, year, amount_per_share, yield_rate)
 VALUES ('005930', 2024, 800, 0.38);
+
+INSERT INTO trade_history (user_id, company_id, trade_type, quantity, price, traded_at)
+VALUES (invest-lover, '005930', 'BUY', 10, 71500, CURRENT_TIMESTAMP);
+
+INSERT INTO trade_history (user_id, company_id, trade_type, quantity, price, traded_at)
+VALUES (invest-lover, '005930', 'SELL', 5, 71600, CURRENT_TIMESTAMP);
