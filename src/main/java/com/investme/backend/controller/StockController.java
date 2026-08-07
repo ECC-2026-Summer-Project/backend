@@ -6,6 +6,7 @@ import com.investme.backend.dto.stock.StockSummaryResponse;
 import com.investme.backend.service.StockService;
 import org.springframework.web.bind.annotation.*;
 import com.investme.backend.dto.stock.StockOrderBookResponse;
+import com.investme.backend.dto.stock.StockTradeResponse;
 
 import java.util.List;
 
@@ -47,6 +48,18 @@ public class StockController {
     ) {
 
         StockOrderBookResponse response = stockService.getOrderBook(stockId);
+
+        return new ApiResponse<>(true, response, null);
+    }
+
+    @GetMapping("/{stockId}/trades")
+    public ApiResponse<List<StockTradeResponse>> getTrades(
+            @PathVariable String stockId,
+            @RequestParam(defaultValue = "50") int limit
+    ) {
+
+        List<StockTradeResponse> response =
+                stockService.getTrades(stockId, limit);
 
         return new ApiResponse<>(true, response, null);
     }

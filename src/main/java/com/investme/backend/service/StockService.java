@@ -10,6 +10,11 @@ import com.investme.backend.repository.CompanyInfoRepository;
 import com.investme.backend.repository.CompanyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.investme.backend.dto.stock.StockTradeResponse;
+import com.investme.backend.entity.TradeHistory;
+import com.investme.backend.repository.TradeHistoryRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Random;
 import java.util.ArrayList;
@@ -21,13 +26,16 @@ public class StockService {
 
     private final CompanyRepository companyRepository;
     private final CompanyInfoRepository companyInfoRepository;
+    private final TradeHistoryRepository tradeHistoryRepository;
 
     public StockService(
             CompanyRepository companyRepository,
-            CompanyInfoRepository companyInfoRepository
+            CompanyInfoRepository companyInfoRepository,
+            TradeHistoryRepository tradeHistoryRepository
     ) {
         this.companyRepository = companyRepository;
         this.companyInfoRepository = companyInfoRepository;
+        this.tradeHistoryRepository = tradeHistoryRepository;
     }
 
     public StockSummaryResponse getSummary(String stockId) {
@@ -161,5 +169,31 @@ public class StockService {
                 .asks(asks)
                 .bids(bids)
                 .build();
+    }
+
+    public List<StockTradeResponse> getTrades(String stockId, int limit) {
+
+        // 존재하지 않는 종목인지 먼저 확인
+        companyRepository.findByCompanyId(stockId)
+                .orElseThrow(() -> new StockNotFoundException(stockId));
+
+        Pageable pageable = PageRequest.of(0, limit);
+
+        List<TradeHistory> tradeHistories =
+                tradeHistoryRepository
+                        .findByCompany_CompanyIdOrderByTradedAtDesc(
+                                stockId,
+                                pageable
+                        );
+
+        return tradeHistories.stream()
+                .map(trade -> StockTradeResponse.builder()
+                        .time(trade.getTradedAt())
+                        .price(trade.getPrice())
+                        .quantity(trade.getQuantity())
+                        .side(trade.getTradeType())
+                        .build()
+                )
+                .toList();
     }
 }
