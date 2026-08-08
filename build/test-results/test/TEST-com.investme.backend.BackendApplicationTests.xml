@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.investme.backend.BackendApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-08-07T14:27:33.729Z" hostname="DESKTOP-H65LQQC" time="39.523">
+<testsuite name="com.investme.backend.BackendApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-08-08T12:18:04.427Z" hostname="DESKTOP-H65LQQC" time="145.251">
   <properties/>
-  <testcase name="contextLoads()" classname="com.investme.backend.BackendApplicationTests" time="0.991"/>
-  <system-out><![CDATA[23:27:34.903 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.investme.backend.BackendApplicationTests]: BackendApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-23:27:35.707 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.investme.backend.BackendApplication for test class com.investme.backend.BackendApplicationTests
-23:27:36.486 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.investme.backend.BackendApplicationTests]: BackendApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-23:27:36.490 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.investme.backend.BackendApplication for test class com.investme.backend.BackendApplicationTests
+  <testcase name="contextLoads()" classname="com.investme.backend.BackendApplicationTests" time="2.795"/>
+  <system-out><![CDATA[21:18:07.521 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.investme.backend.BackendApplicationTests]: BackendApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+21:18:09.336 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.investme.backend.BackendApplication for test class com.investme.backend.BackendApplicationTests
+21:18:11.197 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.investme.backend.BackendApplicationTests]: BackendApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+21:18:11.206 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.investme.backend.BackendApplication for test class com.investme.backend.BackendApplicationTests
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -16,17 +16,17 @@
 
  :: Spring Boot ::                (v4.1.0)
 
-2026-08-07T23:27:38.487+09:00  INFO 254103 --- [backend] [    Test worker] c.i.backend.BackendApplicationTests      : Starting BackendApplicationTests using Java 17.0.19 with PID 254103 (started by ryunn0228 in /mnt/c/ECC_backend/backend)
-2026-08-07T23:27:38.491+09:00  INFO 254103 --- [backend] [    Test worker] c.i.backend.BackendApplicationTests      : No active profile set, falling back to 1 default profile: "default"
-2026-08-07T23:27:42.455+09:00  INFO 254103 --- [backend] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2026-08-07T23:27:43.220+09:00  INFO 254103 --- [backend] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 665 ms. Found 7 JPA repository interfaces.
-2026-08-07T23:27:46.240+09:00  INFO 254103 --- [backend] [    Test worker] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
-2026-08-07T23:27:46.882+09:00  INFO 254103 --- [backend] [    Test worker] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
-2026-08-07T23:27:51.706+09:00  INFO 254103 --- [backend] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2026-08-07T23:27:52.008+09:00  INFO 254103 --- [backend] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2026-08-07T23:27:54.025+09:00  INFO 254103 --- [backend] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
-2026-08-07T23:27:54.039+09:00  INFO 254103 --- [backend] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2026-08-07T23:27:54.792+09:00  INFO 254103 --- [backend] [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+2026-08-08T21:18:17.996+09:00  INFO 254794 --- [backend] [    Test worker] c.i.backend.BackendApplicationTests      : Starting BackendApplicationTests using Java 17.0.19 with PID 254794 (started by ryunn0228 in /mnt/c/ECC_backend/backend)
+2026-08-08T21:18:18.005+09:00  INFO 254794 --- [backend] [    Test worker] c.i.backend.BackendApplicationTests      : No active profile set, falling back to 1 default profile: "default"
+2026-08-08T21:18:26.471+09:00  INFO 254794 --- [backend] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-08-08T21:18:27.924+09:00  INFO 254794 --- [backend] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 1346 ms. Found 7 JPA repository interfaces.
+2026-08-08T21:18:37.902+09:00  INFO 254794 --- [backend] [    Test worker] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-08-08T21:18:40.408+09:00  INFO 254794 --- [backend] [    Test worker] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-08-08T21:19:05.191+09:00  INFO 254794 --- [backend] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-08-08T21:19:07.440+09:00  INFO 254794 --- [backend] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-08-08T21:19:18.091+09:00  INFO 254794 --- [backend] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-08-08T21:19:18.221+09:00  INFO 254794 --- [backend] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-08-08T21:19:21.687+09:00  INFO 254794 --- [backend] [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
 	Database JDBC URL [jdbc:h2:mem:testdb]
 	Database driver: H2 JDBC Driver
 	Database dialect: H2Dialect
@@ -38,7 +38,7 @@
 	Pool: DataSourceConnectionProvider
 	Minimum pool size: undefined/unknown
 	Maximum pool size: undefined/unknown
-2026-08-07T23:28:04.595+09:00  INFO 254103 --- [backend] [    Test worker] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-08-08T21:20:05.809+09:00  INFO 254794 --- [backend] [    Test worker] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
 Hibernate: 
     create table company (
         company_id varchar(255) not null,
@@ -114,18 +114,18 @@ Hibernate:
 Hibernate: 
     alter table if exists users 
        add constraint UK6efs5vmce86ymf5q7lmvn2uuf unique (user_id)
-2026-08-07T23:28:05.069+09:00  INFO 254103 --- [backend] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2026-08-07T23:28:05.619+09:00  INFO 254103 --- [backend] [    Test worker] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
-2026-08-07T23:28:07.645+09:00  WARN 254103 --- [backend] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2026-08-07T23:28:08.847+09:00  WARN 254103 --- [backend] [    Test worker] .s.a.UserDetailsServiceAutoConfiguration : 
+2026-08-08T21:20:07.278+09:00  INFO 254794 --- [backend] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-08-08T21:20:08.625+09:00  INFO 254794 --- [backend] [    Test worker] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-08-08T21:20:13.715+09:00  WARN 254794 --- [backend] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-08-08T21:20:16.259+09:00  WARN 254794 --- [backend] [    Test worker] .s.a.UserDetailsServiceAutoConfiguration : 
 
-Using generated security password: a48af06f-a952-428d-aeaf-c1719a1f4eb3
+Using generated security password: da5d47a1-b0fa-40b3-8e4c-2a9f4440b335
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
-2026-08-07T23:28:08.910+09:00  INFO 254103 --- [backend] [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
-2026-08-07T23:28:11.666+09:00  INFO 254103 --- [backend] [    Test worker] o.s.b.h.a.H2ConsoleAutoConfiguration     : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
-2026-08-07T23:28:12.213+09:00  INFO 254103 --- [backend] [    Test worker] c.i.backend.BackendApplicationTests      : Started BackendApplicationTests in 35.255 seconds (process running for 40.759)
+2026-08-08T21:20:16.459+09:00  INFO 254794 --- [backend] [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-08-08T21:20:24.878+09:00  INFO 254794 --- [backend] [    Test worker] o.s.b.h.a.H2ConsoleAutoConfiguration     : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2026-08-08T21:20:26.733+09:00  INFO 254794 --- [backend] [    Test worker] c.i.backend.BackendApplicationTests      : Started BackendApplicationTests in 133.815 seconds (process running for 147.083)
 Hibernate: 
     select
         c1_0.company_id,
