@@ -84,24 +84,26 @@ public class AiRecommendationService {
                             / basePrice
                             * 100;
 
-            response.add(
-                    new SurgingStockResponse(
-                            company.getCompanyId(),
-                            company.getCompanyName(),
-                            currentPrice,
-                            priceChange,
-                            round(changeRate)
-                    )
-            );
-
-            // AI 추천으로 노출되었다는 기록
-            userActionLogRepository.save(
+            UserActionLog exposure =
                     new UserActionLog(
                             user.getId(),
                             company.getCompanyId(),
                             "EXPOSURE",
                             "AI_RECOMMENDATION",
                             null
+                    );
+
+            UserActionLog savedExposure =
+                    userActionLogRepository.save(exposure);
+
+            response.add(
+                    new SurgingStockResponse(
+                            savedExposure.getActionId(),
+                            company.getCompanyId(),
+                            company.getCompanyName(),
+                            currentPrice,
+                            priceChange,
+                            round(changeRate)
                     )
             );
         }
