@@ -2,6 +2,7 @@ package com.investme.backend.controller;
 
 import com.investme.backend.domain.Stock;
 import com.investme.backend.dto.ApiResponse;
+import com.investme.backend.dto.StockChartResponse;
 import com.investme.backend.dto.StockListItemDto;
 import com.investme.backend.dto.StockListResponse;
 import com.investme.backend.dto.StockSummaryResponse;
@@ -75,7 +76,11 @@ public class StockController {
         List<SurgingStockResponse> response =
                 surgingStockService.getSurgingStocks(userId);
 
-        return new ApiResponse<>(true, response, null);
+        return new ApiResponse<>(
+                true,
+                response,
+                null
+        );
     }
 
     @GetMapping("/{stockId}/summary")
@@ -84,6 +89,26 @@ public class StockController {
     ) {
         StockSummaryResponse response =
                 stockService.getStockSummary(stockId);
+
+        return new ApiResponse<>(
+                true,
+                response,
+                null
+        );
+    }
+
+    @GetMapping("/{stockId}/chart")
+    public ApiResponse<List<StockChartResponse>> getStockChart(
+            @PathVariable String stockId,
+            @RequestParam(defaultValue = "1d") String interval,
+            @RequestParam(defaultValue = "1d") String range
+    ) {
+        List<StockChartResponse> response =
+                stockService.getStockChart(
+                        stockId,
+                        interval,
+                        range
+                );
 
         return new ApiResponse<>(
                 true,
