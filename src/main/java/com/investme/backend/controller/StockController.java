@@ -3,6 +3,7 @@ package com.investme.backend.controller;
 import com.investme.backend.domain.Stock;
 import com.investme.backend.dto.ApiResponse;
 import com.investme.backend.dto.StockChartResponse;
+import com.investme.backend.dto.StockDividendResponse;
 import com.investme.backend.dto.StockListItemDto;
 import com.investme.backend.dto.StockListResponse;
 import com.investme.backend.dto.StockOrderBookResponse;
@@ -143,6 +144,20 @@ public class StockController {
                         stockId,
                         limit
                 );
+
+        return new ApiResponse<>(
+                true,
+                response,
+                null
+        );
+    }
+
+    @GetMapping("/{stockId}/dividends")
+    public ApiResponse<List<StockDividendResponse>> getStockDividends(
+            @PathVariable String stockId
+    ) {
+        List<StockDividendResponse> response =
+                stockService.getStockDividends(stockId);
 
         return new ApiResponse<>(
                 true,

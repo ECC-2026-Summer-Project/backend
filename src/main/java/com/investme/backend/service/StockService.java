@@ -4,6 +4,7 @@ import com.investme.backend.domain.Stock;
 import com.investme.backend.domain.TradeHistory;
 import com.investme.backend.dto.OrderBookLevel;
 import com.investme.backend.dto.StockChartResponse;
+import com.investme.backend.dto.StockDividendResponse;
 import com.investme.backend.dto.StockOrderBookResponse;
 import com.investme.backend.dto.StockSummaryResponse;
 import com.investme.backend.dto.StockTradeResponse;
@@ -251,6 +252,56 @@ public class StockService {
                         trade.getSide()
                 ))
                 .toList();
+    }
+
+    public List<StockDividendResponse> getStockDividends(
+            String stockId
+    ) {
+
+        stockRepository.findById(stockId)
+                .orElseThrow(() ->
+                        new ApiException(
+                                HttpStatus.NOT_FOUND,
+                                "STOCK_NOT_FOUND",
+                                "존재하지 않는 종목입니다."
+                        )
+                );
+
+        /*
+         * 현재 프로젝트에는 배당 이력 Entity가 없으므로
+         * API 테스트를 위한 임시 데이터를 반환한다.
+         *
+         * 추후 실제 배당 데이터가 추가되면
+         * 이 부분만 DB 조회 방식으로 변경한다.
+         */
+
+        List<StockDividendResponse> response = new ArrayList<>();
+
+        response.add(
+                new StockDividendResponse(
+                        2025,
+                        850,
+                        0.4
+                )
+        );
+
+        response.add(
+                new StockDividendResponse(
+                        2024,
+                        800,
+                        0.38
+                )
+        );
+
+        response.add(
+                new StockDividendResponse(
+                        2023,
+                        700,
+                        0.35
+                )
+        );
+
+        return response;
     }
 
     private void validateChartParameter(
