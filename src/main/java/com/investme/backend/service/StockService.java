@@ -5,6 +5,7 @@ import com.investme.backend.domain.TradeHistory;
 import com.investme.backend.dto.OrderBookLevel;
 import com.investme.backend.dto.StockChartResponse;
 import com.investme.backend.dto.StockDividendResponse;
+import com.investme.backend.dto.StockInfoResponse;
 import com.investme.backend.dto.StockOrderBookResponse;
 import com.investme.backend.dto.StockSummaryResponse;
 import com.investme.backend.dto.StockTradeResponse;
@@ -267,14 +268,6 @@ public class StockService {
                         )
                 );
 
-        /*
-         * 현재 프로젝트에는 배당 이력 Entity가 없으므로
-         * API 테스트를 위한 임시 데이터를 반환한다.
-         *
-         * 추후 실제 배당 데이터가 추가되면
-         * 이 부분만 DB 조회 방식으로 변경한다.
-         */
-
         List<StockDividendResponse> response = new ArrayList<>();
 
         response.add(
@@ -302,6 +295,60 @@ public class StockService {
         );
 
         return response;
+    }
+
+    public StockInfoResponse getStockInfo(
+            String stockId
+    ) {
+
+        Stock stock = stockRepository.findById(stockId)
+                .orElseThrow(() ->
+                        new ApiException(
+                                HttpStatus.NOT_FOUND,
+                                "STOCK_NOT_FOUND",
+                                "존재하지 않는 종목입니다."
+                        )
+                );
+
+        /*
+         * 현재 Stock Entity에 존재하는 값은 실제 DB에서 가져온다.
+         * Stock Entity에 없는 기업 정보는 임시 데이터를 사용한다.
+         *
+         * 추후 기업 정보 데이터가 추가되면
+         * 이 부분만 DB 조회 방식으로 변경하면 된다.
+         */
+
+        String description =
+                stock.getName() + " 기업 정보입니다.";
+
+        String industry =
+                stock.getSector();
+
+        double per = 15.8;
+
+        double dividendYield = 0.4;
+
+        String listedDate =
+                "1975-06-11";
+
+        String ceo =
+                "한종희";
+
+        int employees =
+                267900;
+
+        return new StockInfoResponse(
+                stock.getStockId(),
+                stock.getName(),
+                description,
+                industry,
+                stock.getMarketCap(),
+                per,
+                dividendYield,
+                listedDate,
+                ceo,
+                employees
+        );
     }
 
     private void validateChartParameter(
