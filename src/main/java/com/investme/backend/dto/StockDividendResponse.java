@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ApiResponse<T> {
+public class StockDividendResponse {
 
-    private boolean success;
-    private T data;
-    private String error;
+    private int year;
+    private int amountPerShare;
+    private double yieldRate;
 }

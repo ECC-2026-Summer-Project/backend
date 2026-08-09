@@ -5,9 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ApiResponse<T> {
+public class OrderBookLevel {
 
-    private boolean success;
-    private T data;
-    private String error;
+    private long price;
+    private long quantity;
 }

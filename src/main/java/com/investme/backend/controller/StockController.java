@@ -2,8 +2,14 @@ package com.investme.backend.controller;
 
 import com.investme.backend.domain.Stock;
 import com.investme.backend.dto.ApiResponse;
+import com.investme.backend.dto.StockChartResponse;
+import com.investme.backend.dto.StockDividendResponse;
+import com.investme.backend.dto.StockInfoResponse;
 import com.investme.backend.dto.StockListItemDto;
 import com.investme.backend.dto.StockListResponse;
+import com.investme.backend.dto.StockOrderBookResponse;
+import com.investme.backend.dto.StockSummaryResponse;
+import com.investme.backend.dto.StockTradeResponse;
 import com.investme.backend.dto.SurgingStockResponse;
 import com.investme.backend.service.StockService;
 import com.investme.backend.service.SurgingStockService;
@@ -31,13 +37,31 @@ public class StockController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
-        Page<Stock> result = stockService.getStockList(keyword, sector, sort, order, page, size);
-        List<StockListItemDto> items = result.getContent().stream()
-                .map(s -> new StockListItemDto(
-                        s.getStockId(), s.getName(), s.getMarket(),
-                        s.getCurrentPrice(), s.getChangeRate(), s.getChangeAmount(),
-                        s.getVolume(), s.getMarketCap()))
-                .toList();
+        Page<Stock> result =
+                stockService.getStockList(
+                        keyword,
+                        sector,
+                        sort,
+                        order,
+                        page,
+                        size
+                );
+
+        List<StockListItemDto> items =
+                result.getContent()
+                        .stream()
+                        .map(s -> new StockListItemDto(
+                                s.getStockId(),
+                                s.getName(),
+                                s.getMarket(),
+                                s.getCurrentPrice(),
+                                s.getChangeRate(),
+                                s.getChangeAmount(),
+                                s.getVolume(),
+                                s.getMarketCap()
+                        ))
+                        .toList();
+
         return StockListResponse.builder()
                 .success(true)
                 .data(items)
@@ -48,9 +72,112 @@ public class StockController {
     }
 
     @GetMapping("/surging")
-    public ApiResponse<List<SurgingStockResponse>> getSurgingStocks(Authentication authentication) {
+    public ApiResponse<List<SurgingStockResponse>> getSurgingStocks(
+            Authentication authentication
+    ) {
         String userId = authentication.getName();
-        List<SurgingStockResponse> response = surgingStockService.getSurgingStocks(userId);
-        return new ApiResponse<>(true, response, null);
+
+        List<SurgingStockResponse> response =
+                surgingStockService.getSurgingStocks(userId);
+
+        return new ApiResponse<>(
+                true,
+                response,
+                null
+        );
+    }
+
+    @GetMapping("/{stockId}/summary")
+    public ApiResponse<StockSummaryResponse> getStockSummary(
+            @PathVariable String stockId
+    ) {
+        StockSummaryResponse response =
+                stockService.getStockSummary(stockId);
+
+        return new ApiResponse<>(
+                true,
+                response,
+                null
+        );
+    }
+
+    @GetMapping("/{stockId}/chart")
+    public ApiResponse<List<StockChartResponse>> getStockChart(
+            @PathVariable String stockId,
+            @RequestParam(defaultValue = "1d") String interval,
+            @RequestParam(defaultValue = "1d") String range
+    ) {
+        List<StockChartResponse> response =
+                stockService.getStockChart(
+                        stockId,
+                        interval,
+                        range
+                );
+
+        return new ApiResponse<>(
+                true,
+                response,
+                null
+        );
+    }
+
+    @GetMapping("/{stockId}/orderbook")
+    public ApiResponse<StockOrderBookResponse> getStockOrderBook(
+            @PathVariable String stockId
+    ) {
+        StockOrderBookResponse response =
+                stockService.getStockOrderBook(stockId);
+
+        return new ApiResponse<>(
+                true,
+                response,
+                null
+        );
+    }
+
+    @GetMapping("/{stockId}/trades")
+    public ApiResponse<List<StockTradeResponse>> getStockTrades(
+            @PathVariable String stockId,
+            @RequestParam(defaultValue = "50") int limit
+    ) {
+        List<StockTradeResponse> response =
+                stockService.getStockTrades(
+                        stockId,
+                        limit
+                );
+
+        return new ApiResponse<>(
+                true,
+                response,
+                null
+        );
+    }
+
+    @GetMapping("/{stockId}/dividends")
+    public ApiResponse<List<StockDividendResponse>> getStockDividends(
+            @PathVariable String stockId
+    ) {
+        List<StockDividendResponse> response =
+                stockService.getStockDividends(stockId);
+
+        return new ApiResponse<>(
+                true,
+                response,
+                null
+        );
+    }
+
+    @GetMapping("/{stockId}/info")
+    public ApiResponse<StockInfoResponse> getStockInfo(
+            @PathVariable String stockId
+    ) {
+        StockInfoResponse response =
+                stockService.getStockInfo(stockId);
+
+        return new ApiResponse<>(
+                true,
+                response,
+                null
+        );
     }
 }
