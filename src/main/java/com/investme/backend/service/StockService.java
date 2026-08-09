@@ -1,7 +1,9 @@
 package com.investme.backend.service;
 
 import com.investme.backend.domain.Stock;
+import com.investme.backend.dto.OrderBookLevel;
 import com.investme.backend.dto.StockChartResponse;
+import com.investme.backend.dto.StockOrderBookResponse;
 import com.investme.backend.dto.StockSummaryResponse;
 import com.investme.backend.exception.ApiException;
 import com.investme.backend.repository.StockRepository;
@@ -116,14 +118,6 @@ public class StockService {
 
         validateChartParameter(interval, range);
 
-        /*
-         * 현재 실제 OHLC 데이터가 없기 때문에
-         * API 동작 확인을 위한 임시 데이터를 생성한다.
-         *
-         * 나중에 실제 차트 데이터가 연결되면
-         * 이 부분만 실제 데이터 조회 코드로 변경하면 된다.
-         */
-
         int currentPrice = stock.getCurrentPrice();
 
         List<StockChartResponse> response = new ArrayList<>();
@@ -155,6 +149,64 @@ public class StockService {
         return response;
     }
 
+    public StockOrderBookResponse getStockOrderBook(String stockId) {
+
+        Stock stock = stockRepository.findById(stockId)
+                .orElseThrow(() ->
+                        new ApiException(
+                                HttpStatus.NOT_FOUND,
+                                "STOCK_NOT_FOUND",
+                                "존재하지 않는 종목입니다."
+                        )
+                );
+
+        long currentPrice = stock.getCurrentPrice();
+
+        List<OrderBookLevel> asks = new ArrayList<>();
+        List<OrderBookLevel> bids = new ArrayList<>();
+
+        /*
+         * 현재 실제 호가 데이터가 없으므로
+         * API 테스트를 위한 임시 호가 데이터를 생성한다.
+         */
+
+        asks.add(new OrderBookLevel(
+                currentPrice + 100,
+                320
+        ));
+
+        asks.add(new OrderBookLevel(
+                currentPrice + 200,
+                540
+        ));
+
+        asks.add(new OrderBookLevel(
+                currentPrice + 300,
+                420
+        ));
+
+        bids.add(new OrderBookLevel(
+                currentPrice - 100,
+                610
+        ));
+
+        bids.add(new OrderBookLevel(
+                currentPrice - 200,
+                480
+        ));
+
+        bids.add(new OrderBookLevel(
+                currentPrice - 300,
+                350
+        ));
+
+        return new StockOrderBookResponse(
+                currentPrice,
+                asks,
+                bids
+        );
+    }
+
     private void validateChartParameter(
             String interval,
             String range
@@ -180,22 +232,6 @@ public class StockService {
             String interval,
             String range
     ) {
-        if ("1d".equals(range)) {
-            if ("1m".equals(interval)) {
-                return 10;
-            }
-
-            if ("5m".equals(interval)) {
-                return 10;
-            }
-
-            return 10;
-        }
-
-        if ("1w".equals(range)) {
-            return 10;
-        }
-
         return 10;
     }
 
