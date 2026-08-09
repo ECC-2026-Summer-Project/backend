@@ -4,6 +4,7 @@ import com.investme.backend.domain.Stock;
 import com.investme.backend.dto.ApiResponse;
 import com.investme.backend.dto.StockListItemDto;
 import com.investme.backend.dto.StockListResponse;
+import com.investme.backend.dto.StockSummaryResponse;
 import com.investme.backend.dto.SurgingStockResponse;
 import com.investme.backend.service.StockService;
 import com.investme.backend.service.SurgingStockService;
@@ -31,13 +32,31 @@ public class StockController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
-        Page<Stock> result = stockService.getStockList(keyword, sector, sort, order, page, size);
-        List<StockListItemDto> items = result.getContent().stream()
-                .map(s -> new StockListItemDto(
-                        s.getStockId(), s.getName(), s.getMarket(),
-                        s.getCurrentPrice(), s.getChangeRate(), s.getChangeAmount(),
-                        s.getVolume(), s.getMarketCap()))
-                .toList();
+        Page<Stock> result =
+                stockService.getStockList(
+                        keyword,
+                        sector,
+                        sort,
+                        order,
+                        page,
+                        size
+                );
+
+        List<StockListItemDto> items =
+                result.getContent()
+                        .stream()
+                        .map(s -> new StockListItemDto(
+                                s.getStockId(),
+                                s.getName(),
+                                s.getMarket(),
+                                s.getCurrentPrice(),
+                                s.getChangeRate(),
+                                s.getChangeAmount(),
+                                s.getVolume(),
+                                s.getMarketCap()
+                        ))
+                        .toList();
+
         return StockListResponse.builder()
                 .success(true)
                 .data(items)
@@ -48,9 +67,28 @@ public class StockController {
     }
 
     @GetMapping("/surging")
-    public ApiResponse<List<SurgingStockResponse>> getSurgingStocks(Authentication authentication) {
+    public ApiResponse<List<SurgingStockResponse>> getSurgingStocks(
+            Authentication authentication
+    ) {
         String userId = authentication.getName();
-        List<SurgingStockResponse> response = surgingStockService.getSurgingStocks(userId);
+
+        List<SurgingStockResponse> response =
+                surgingStockService.getSurgingStocks(userId);
+
         return new ApiResponse<>(true, response, null);
+    }
+
+    @GetMapping("/{stockId}/summary")
+    public ApiResponse<StockSummaryResponse> getStockSummary(
+            @PathVariable String stockId
+    ) {
+        StockSummaryResponse response =
+                stockService.getStockSummary(stockId);
+
+        return new ApiResponse<>(
+                true,
+                response,
+                null
+        );
     }
 }
