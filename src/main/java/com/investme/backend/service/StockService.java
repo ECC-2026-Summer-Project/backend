@@ -1,12 +1,15 @@
 package com.investme.backend.service;
 
 import com.investme.backend.domain.Stock;
+import com.investme.backend.domain.TradeHistory;
 import com.investme.backend.dto.OrderBookLevel;
 import com.investme.backend.dto.StockChartResponse;
 import com.investme.backend.dto.StockOrderBookResponse;
 import com.investme.backend.dto.StockSummaryResponse;
+import com.investme.backend.dto.StockTradeResponse;
 import com.investme.backend.exception.ApiException;
 import com.investme.backend.repository.StockRepository;
+import com.investme.backend.repository.TradeHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +27,7 @@ import java.util.List;
 public class StockService {
 
     private final StockRepository stockRepository;
+    private final TradeHistoryRepository tradeHistoryRepository;
 
     private static final List<String> VALID_SORTS =
             List.of("price", "changeRate", "volume");
@@ -165,11 +169,6 @@ public class StockService {
         List<OrderBookLevel> asks = new ArrayList<>();
         List<OrderBookLevel> bids = new ArrayList<>();
 
-        /*
-         * 현재 실제 호가 데이터가 없으므로
-         * API 테스트를 위한 임시 호가 데이터를 생성한다.
-         */
-
         asks.add(new OrderBookLevel(
                 currentPrice + 100,
                 320
@@ -205,6 +204,53 @@ public class StockService {
                 asks,
                 bids
         );
+    }
+
+    public List<StockTradeResponse> getStockTrades(
+            String stockId,
+            int limit
+    ) {
+
+        stockRepository.findById(stockId)
+                .orElseThrow(() ->
+                        new ApiException(
+                                HttpStatus.NOT_FOUND,
+                                "STOCK_NOT_FOUND",
+                                "존재하지 않는 종목입니다."
+                        )
+                );
+
+        if (limit <= 0) {
+            throw new ApiException(
+                    HttpStatus.BAD_REQUEST,
+                    "INVALID_LIMIT",
+                    "limit은 1 이상이어야 합니다."
+            );
+        }
+
+        Pageable pageable =
+                PageRequest.of(
+                        0,
+                        limit
+                );
+
+        Page<TradeHistory> tradeHistories =
+                tradeHistoryRepository
+                        .findByStockIdOrderByCreatedAtDesc(
+                                stockId,
+                                pageable
+                        );
+
+        return tradeHistories
+                .getContent()
+                .stream()
+                .map(trade -> new StockTradeResponse(
+                        trade.getCreatedAt(),
+                        trade.getPrice(),
+                        trade.getQuantity(),
+                        trade.getSide()
+                ))
+                .toList();
     }
 
     private void validateChartParameter(

@@ -7,6 +7,7 @@ import com.investme.backend.dto.StockListItemDto;
 import com.investme.backend.dto.StockListResponse;
 import com.investme.backend.dto.StockOrderBookResponse;
 import com.investme.backend.dto.StockSummaryResponse;
+import com.investme.backend.dto.StockTradeResponse;
 import com.investme.backend.dto.SurgingStockResponse;
 import com.investme.backend.service.StockService;
 import com.investme.backend.service.SurgingStockService;
@@ -124,6 +125,24 @@ public class StockController {
     ) {
         StockOrderBookResponse response =
                 stockService.getStockOrderBook(stockId);
+
+        return new ApiResponse<>(
+                true,
+                response,
+                null
+        );
+    }
+
+    @GetMapping("/{stockId}/trades")
+    public ApiResponse<List<StockTradeResponse>> getStockTrades(
+            @PathVariable String stockId,
+            @RequestParam(defaultValue = "50") int limit
+    ) {
+        List<StockTradeResponse> response =
+                stockService.getStockTrades(
+                        stockId,
+                        limit
+                );
 
         return new ApiResponse<>(
                 true,
