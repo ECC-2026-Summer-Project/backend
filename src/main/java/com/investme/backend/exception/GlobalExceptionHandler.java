@@ -33,4 +33,17 @@ public class GlobalExceptionHandler {
         ApiResponse<Void> response = new ApiResponse<>(false, null, e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
+
+    @ExceptionHandler(NewsNotFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleNewsNotFound(NewsNotFoundException e) {
+        ApiResponse<Void> response = new ApiResponse<>(false, null, e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(NewsViewNotStartedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleNewsViewNotStarted(NewsViewNotStartedException e) {
+        ApiResponse<Void> response = new ApiResponse<>(false, null, e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
 }
+
