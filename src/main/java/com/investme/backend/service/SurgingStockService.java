@@ -86,26 +86,28 @@ public class SurgingStockService {
                             / basePrice
                             * 100;
 
-            response.add(
-                    new SurgingStockResponse(
-                            company.getCompanyId(),
-                            company.getCompanyName(),
-                            currentPrice,
-                            priceChange,
-                            round(changeRate)
-                    )
-            );
+UserActionLog exposure =
+        new UserActionLog(
+                user.getId(),
+                company.getCompanyId(),
+                "EXPOSURE",
+                "SURGING_STOCK",
+                null
+        );
 
-            UserActionLog exposure =
-                    new UserActionLog(
-                            user.getId(),
-                            company.getCompanyId(),
-                            "EXPOSURE",
-                            "SURGING_STOCK",
-                            null
-                    );
+UserActionLog savedExposure =
+        userActionLogRepository.save(exposure);
 
-            userActionLogRepository.save(exposure);
+response.add(
+        new SurgingStockResponse(
+                savedExposure.getActionId(),
+                company.getCompanyId(),
+                company.getCompanyName(),
+                currentPrice,
+                priceChange,
+                round(changeRate)
+        )
+);
         }
 
         return response;

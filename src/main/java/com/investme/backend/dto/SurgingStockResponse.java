@@ -7,6 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class SurgingStockResponse {
 
+    private Long eventId;
+    
     private String stockId;
     private String stockName;
     private Integer currentPrice;
