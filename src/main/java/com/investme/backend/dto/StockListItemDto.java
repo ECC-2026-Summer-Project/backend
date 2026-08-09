@@ -1,0 +1,18 @@
+package com.investme.backend.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+
+public class StockListItemDto {
+    private String stockId;
+    private String name;
+    private String market;
+    private int currentPrice;
+    private double changeRate;
+    private int changeAmount;
+    private long volume;
+    private long marketCap;
+}
