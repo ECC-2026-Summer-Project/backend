@@ -1,7 +1,7 @@
 plugins {
    id 'java'
-   id 'org.springframework.boot' version '3.2.5'
-   id 'io.spring.dependency-management' version '1.1.7'
+   id 'org.springframework.boot' version '3.2.4'
+   id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'com.investme'
@@ -23,10 +23,8 @@ dependencies {
    implementation 'org.springframework.boot:spring-boot-starter-web'
    implementation 'org.springframework.boot:spring-boot-starter-security'
 
-   // PostgreSQL 드라이버 (오타 수정완료)
+   // DB 드라이버
    implementation 'org.postgresql:postgresql'
-
-   // H2 DB (로컬용)
    runtimeOnly 'com.h2database:h2'
 
    // Lombok
