@@ -5,6 +5,7 @@ import com.investme.backend.entity.User;
 import com.investme.backend.jwt.JwtProvider;
 import com.investme.backend.service.UserService;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
@@ -23,7 +24,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public ApiResponse<SignupResponse> signup(
-            @RequestBody SignupRequest request
+            @Valid @RequestBody SignupRequest request
     ) {
 
         User user = userService.signup(request);
