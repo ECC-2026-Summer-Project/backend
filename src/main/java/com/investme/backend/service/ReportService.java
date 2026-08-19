@@ -3,12 +3,12 @@ package com.investme.backend.service;
 import com.investme.backend.domain.TradeHistory;
 import com.investme.backend.dto.ReportCreateResponse;
 import com.investme.backend.dto.ReportResponse;
-import com.investme.backend.entity.Company;
+import com.investme.backend.domain.Stock;
 import com.investme.backend.entity.PsychologyReport;
 import com.investme.backend.entity.UserActionLog;
 import com.investme.backend.entity.UserNewsEvent;
 import com.investme.backend.entity.UserStock;
-import com.investme.backend.repository.CompanyRepository;
+import com.investme.backend.repository.StockRepository;
 import com.investme.backend.repository.PsychologyReportRepository;
 import com.investme.backend.repository.TradeHistoryRepository;
 import com.investme.backend.repository.UserActionLogRepository;
@@ -28,7 +28,7 @@ public class ReportService {
     private final UserActionLogRepository userActionLogRepository;
     private final UserNewsEventRepository userNewsEventRepository;
     private final UserStockRepository userStockRepository;
-    private final CompanyRepository companyRepository;
+    private final StockRepository stockRepository;
     private final PsychologyReportRepository psychologyReportRepository;
 
 
@@ -74,25 +74,25 @@ public class ReportService {
 
 
         // 4. 현재 보유 종목의 총 평가 금액
-        long totalEvaluationAmount =
-                holdings.stream()
-                        .mapToLong(holding -> {
+long totalEvaluationAmount =
+        holdings.stream()
+                .mapToLong(holding -> {
 
-                            Company company =
-                                    companyRepository
-                                            .findById(
-                                                    holding.getCompanyId()
+                    Stock stock =
+                            stockRepository
+                                    .findById(
+                                            holding.getStockId()
+                                    )
+                                    .orElseThrow(() ->
+                                            new IllegalArgumentException(
+                                                    "종목을 찾을 수 없습니다."
                                             )
-                                            .orElseThrow(() ->
-                                                    new IllegalArgumentException(
-                                                            "종목을 찾을 수 없습니다."
-                                                    )
-                                            );
+                                    );
 
-                            return (long) holding.getQuantity()
-                                    * company.getCurrentPrice();
-                        })
-                        .sum();
+                    return (long) holding.getQuantity()
+                            * stock.getCurrentPrice();
+                })
+                .sum();
 
 
         // 5. 평가 손익
@@ -626,103 +626,93 @@ public class ReportService {
     // =========================================================
 
     private StockPerformanceResult calculateStockPerformance(
-            List<UserStock> holdings
-    ) {
+        List<UserStock> holdings
+) {
 
-        String bestStockId = null;
-        String bestStockName = null;
-        double bestReturnRate =
-                Double.NEGATIVE_INFINITY;
+    String bestStockId = null;
+    String bestStockName = null;
+    double bestReturnRate =
+            Double.NEGATIVE_INFINITY;
 
+    String worstStockId = null;
+    String worstStockName = null;
+    double worstReturnRate =
+            Double.POSITIVE_INFINITY;
 
-        String worstStockId = null;
-        String worstStockName = null;
-        double worstReturnRate =
-                Double.POSITIVE_INFINITY;
+    for (UserStock holding : holdings) {
 
+        Stock stock =
+                stockRepository
+                        .findById(
+                                holding.getStockId()
+                        )
+                        .orElseThrow(() ->
+                                new IllegalArgumentException(
+                                        "종목을 찾을 수 없습니다."
+                                )
+                        );
 
-        for (UserStock holding : holdings) {
+        long purchaseAmount =
+                holding.getTotalAmount();
 
-            Company company =
-                    companyRepository
-                            .findById(
-                                    holding.getCompanyId()
-                            )
-                            .orElseThrow(() ->
-                                    new IllegalArgumentException(
-                                            "종목을 찾을 수 없습니다."
-                                    )
-                            );
+        long evaluationAmount =
+                (long) holding.getQuantity()
+                        * stock.getCurrentPrice();
 
+        double returnRate =
+                purchaseAmount == 0
+                        ? 0.0
+                        : (double) (
+                        evaluationAmount
+                                - purchaseAmount
+                )
+                        / purchaseAmount
+                        * 100;
 
-            long purchaseAmount =
-                    holding.getTotalAmount();
+        returnRate =
+                round(returnRate);
 
+        if (returnRate > bestReturnRate) {
 
-            long evaluationAmount =
-                    (long) holding.getQuantity()
-                            * company.getCurrentPrice();
+            bestReturnRate =
+                    returnRate;
 
+            bestStockId =
+                    stock.getStockId();
 
-            double returnRate =
-                    purchaseAmount == 0
-                            ? 0.0
-                            : (double) (
-                            evaluationAmount
-                                    - purchaseAmount
-                    )
-                            / purchaseAmount
-                            * 100;
-
-
-            returnRate =
-                    round(returnRate);
-
-
-            if (returnRate > bestReturnRate) {
-
-                bestReturnRate =
-                        returnRate;
-
-                bestStockId =
-                        company.getCompanyId();
-
-                bestStockName =
-                        company.getCompanyName();
-            }
-
-
-            if (returnRate < worstReturnRate) {
-
-                worstReturnRate =
-                        returnRate;
-
-                worstStockId =
-                        company.getCompanyId();
-
-                worstStockName =
-                        company.getCompanyName();
-            }
+            bestStockName =
+                    stock.getName();
         }
 
+        if (returnRate < worstReturnRate) {
 
-        if (holdings.isEmpty()) {
+            worstReturnRate =
+                    returnRate;
 
-            bestReturnRate = 0.0;
-            worstReturnRate = 0.0;
+            worstStockId =
+                    stock.getStockId();
+
+            worstStockName =
+                    stock.getName();
         }
-
-
-        return new StockPerformanceResult(
-                bestStockId,
-                bestStockName,
-                bestReturnRate,
-
-                worstStockId,
-                worstStockName,
-                worstReturnRate
-        );
     }
+
+    if (holdings.isEmpty()) {
+
+        bestReturnRate = 0.0;
+        worstReturnRate = 0.0;
+    }
+
+    return new StockPerformanceResult(
+            bestStockId,
+            bestStockName,
+            bestReturnRate,
+
+            worstStockId,
+            worstStockName,
+            worstReturnRate
+    );
+}
 
 
     // =========================================================

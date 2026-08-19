@@ -17,8 +17,8 @@ public class StockPriceHistory {
     @Column(name = "history_id")
     private Long historyId;
 
-    @Column(name = "company_id", nullable = false)
-    private String companyId;
+    @Column(name = "stock_id", nullable = false)
+    private String stockId;
 
     @Column(nullable = false)
     private Integer price;
@@ -27,10 +27,10 @@ public class StockPriceHistory {
     private LocalDateTime createdAt;
 
     public StockPriceHistory(
-            String companyId,
+            String stockId,
             Integer price
     ) {
-        this.companyId = companyId;
+        this.stockId = stockId;
         this.price = price;
         this.createdAt = LocalDateTime.now();
     }

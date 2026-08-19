@@ -1,9 +1,9 @@
 package com.investme.backend.service;
 
-import com.investme.backend.entity.Company;
+import com.investme.backend.domain.Stock;
 import com.investme.backend.entity.StockPriceHistory;
-import com.investme.backend.repository.CompanyRepository;
 import com.investme.backend.repository.StockPriceHistoryRepository;
+import com.investme.backend.repository.StockRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,30 +14,31 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StockPriceService {
 
-    private final CompanyRepository companyRepository;
+    private final StockRepository stockRepository;
     private final StockPriceHistoryRepository stockPriceHistoryRepository;
 
     @Transactional
     public void updateStockPrices() {
 
         // 1. 모든 종목 조회
-        List<Company> companies = companyRepository.findAll();
+        List<Stock> stocks = stockRepository.findAll();
 
-        for (Company company : companies) {
+        for (Stock stock : stocks) {
 
-            int currentPrice = company.getCurrentPrice();
+            int currentPrice = stock.getCurrentPrice();
 
-            // 2. 기업별 변동성 가져오기
-            double volatility = company.getVolatility() == null
+            // 2. 종목별 변동성 가져오기
+            double volatility = stock.getVolatility() == null
                     ? 0.02
-                    : company.getVolatility();
+                    : stock.getVolatility();
 
-            // 3. -volatility ~ +volatility 범위의 랜덤 변동 생성
+            // 3. -volatility ~ +volatility 범위 랜덤 변동
             double randomChange =
                     (Math.random() * 2 - 1) * volatility;
 
-            // 4. 기업의 추세에 따른 추가 변화
-            double trendEffect = getTrendEffect(company.getTrend());
+            // 4. 종목 추세 반영
+            double trendEffect =
+                    getTrendEffect(stock.getTrend());
 
             double changeRate =
                     randomChange + trendEffect;
@@ -47,20 +48,19 @@ public class StockPriceService {
                     currentPrice * (1 + changeRate)
             );
 
-            // 가격이 0 이하가 되는 것 방지
             newPrice = Math.max(newPrice, 1);
 
-            // 6. 기존 가격을 History에 기록
+            // 6. 가격 변경 전 현재 가격을 History에 기록
             StockPriceHistory history =
                     new StockPriceHistory(
-                            company.getCompanyId(),
+                            stock.getStockId(),
                             currentPrice
                     );
 
             stockPriceHistoryRepository.save(history);
 
-            // 7. Company의 현재 가격 변경
-            company.updatePrice(newPrice);
+            // 7. Stock 현재 가격 변경
+            stock.updatePrice(newPrice);
         }
     }
 
