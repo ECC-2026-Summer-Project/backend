@@ -34,12 +34,12 @@ public class OrderService {
             }
             user.setCashBalance(user.getCashBalance() - totalAmount);
             userRepository.save(user);
-            UserStock holding = userStockRepository.findByUserIdAndCompanyId(user.getId(), stock.getStockId())
+            UserStock holding = userStockRepository.findByUserIdAndStockId(user.getId(), stock.getStockId())
                     .orElse(new UserStock(user.getId(), stock.getStockId(), 0, 0));
             holding.addQuantity(request.getQuantity(), executedPrice);
             userStockRepository.save(holding);
         } else if ("SELL".equals(request.getSide())) {
-            UserStock holding = userStockRepository.findByUserIdAndCompanyId(user.getId(), stock.getStockId())
+            UserStock holding = userStockRepository.findByUserIdAndStockId(user.getId(), stock.getStockId())
                     .orElseThrow(() -> new ApiException(HttpStatus.BAD_REQUEST, "INSUFFICIENT_HOLDING", "보유 수량이 부족합니다."));
             if (holding.getQuantity() < request.getQuantity()) {
                 throw new ApiException(HttpStatus.BAD_REQUEST, "INSUFFICIENT_HOLDING", "보유 수량이 부족합니다.");

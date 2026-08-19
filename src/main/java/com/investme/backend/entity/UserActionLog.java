@@ -20,8 +20,8 @@ public class UserActionLog {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "company_id")
-    private String companyId;
+    @Column(name = "stock_id")
+    private String stockId;
 
     @Column(name = "action_type", nullable = false)
     private String actionType;
@@ -37,13 +37,13 @@ public class UserActionLog {
 
     public UserActionLog(
             Long userId,
-            String companyId,
+            String stockId,
             String actionType,
             String targetType,
             Long targetId
     ) {
         this.userId = userId;
-        this.companyId = companyId;
+        this.stockId = stockId;
         this.actionType = actionType;
         this.targetType = targetType;
         this.targetId = targetId;
