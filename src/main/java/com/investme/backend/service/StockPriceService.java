@@ -29,7 +29,7 @@ public class StockPriceService {
 
             // 2. 종목별 변동성 가져오기
             double volatility = stock.getVolatility() == null
-                    ? 0.02
+                    ? 0.0001
                     : stock.getVolatility();
 
             // 3. -volatility ~ +volatility 범위 랜덤 변동
