@@ -57,4 +57,8 @@ public class Stock {
         this.lastUpdated =
                 LocalDateTime.now();
     }
+
+    public void updateTrend(String newTrend) {
+    this.trend = newTrend;
+}
 }
